@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sistema Biblioteca - Registro, Login & Panel</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pap36qZ6EFxhAkL8tC6PioRa6HWv+3yr2IK0WkT/nFC3FtFAKO9SW5bPj9HP7WbP1/UVHG41E4s5vmumWJNxFA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    body {
+      background: linear-gradient(130deg, #142850, #1b5ca1);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      user-select: none;
+      padding: 1rem;
+    }
+    .wrapper {
+      background-color: #0682c5;
+      padding: 2.5rem 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 70px #faff02;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      text-align: center;
+      overflow: hidden;
+    }
+    h2 {
+      color: #ff0040;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-align: center;
+    }
+    form {
+      margin-bottom: 1rem;
+    }
+    .form-control {
+      background-color: #3df106;
+      color: #dbe9ee;
+      border: 2px solid transparent;
+      border-radius: 0.75rem;
+      padding-left: 3rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .form-control:focus {
+      background-color: #3282b8;
+      color: #f0f0f0;
+      border-color: #ff7f50;
+      box-shadow: 0 0 8px #ff7f50bb;
+      outline: none;
+    }
+    .input-group-text {
+      background-color: #26a4f8;
+      border: none;
+      color: #ff7f50;
+      font-size: 1.25rem;
+      border-radius: 0.75rem 0 0 0.75rem;
+      box-shadow: none;
+      transition: color 0.3s ease;
+    }
+    .input-group-text:hover {
+      color: #ffa07a;
+      cursor: default;
+    }
+    .btn-primary, .btn-logout {
+      background: linear-gradient(90deg, #aef800, #ff4500);
+      border: none;
+      border-radius: 2rem;
+      padding: 0.75rem 2.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #1b262c;
+      box-shadow: 0 8px 15px #ff7f5077;
+      transition: all 0.3s ease;
+      width: 100%;
+      user-select: none;
+    }
+    .btn-primary:hover, .btn-logout:hover {
+      background: linear-gradient(90deg, #ff4500, #ff7f50);
+      box-shadow: 0 10px 25px #ff450077;
+      color: #f0f0f0;
+    }
+    .btn-primary:active, .btn-logout:active {
+      transform: scale(0.98);
+      box-shadow: 0 5px 12px #ff450088;
+    }
+    .message {
+      margin-top: 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-align: center;
+    }
+    .message.success {
+      color: #90ee90;
+    }
+    .message.error {
+      color: #ff4c4c;
+    }
+    .link-switch {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #ffa07a;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: text;
+    }
+    .link-switch:hover {
+      color: #ff7f50;
+    }
+    /* Mejoras en bienvenida panel */
+    #dashboard-section {
+      color: #ffe6cc;
+      padding: 2rem 1rem 3rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.8rem;
+    }
+    #dashboard-section h2 {
+      font-size: 2.5rem;
+      text-shadow: 0 0 8px #ff7f50bb;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      justify-content: center;
+    }
+    #dashboard-section h2 i {
+      color: #ffbf80;
+      animation: pulse 2.5s infinite ease-in-out;
+      font-size: 3rem;
+    }
+    .welcome-msg {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #ff7f50 0%, #ffa86c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: slideInFromLeft 0.75s ease forwards;
+      margin-bottom: 0;
+    }
+    #dashboard-section .extra-info {
+      font-size: 1rem;
+      color: #ffb87c88;
+      max-width: 280px;
+      line-height: 1.4;
+      font-style: italic;
+      animation: fadeIn 1s ease forwards;
+    }
+    .btn-logout {
+      max-width: 180px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 6px 20px #ff7f5022;
+    }
+    .btn-logout i {
+      font-size: 1.25rem;
+      color: #ff4514;
+      transition: transform 0.3s ease;
+    }
+    .btn-logout:hover i {
+      transform: translateX(6px);
+      color: #ff2c00;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+        color: #ffbf80;
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.3);
+        color: #ffa86c;
+      }
+    }
+    @keyframes slideInFromLeft {
+      0% {
+        opacity: 0; transform: translateX(-100%);
+      }
+      100% {
+        opacity: 1; transform: translateX(0);
+      }
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0;}
+      100% {opacity: 1;}
+    }
+    /* Responsive para panel */
+    @media (max-width: 480px) {
+      #dashboard-section {
+        padding: 1.5rem 1rem 2.5rem;
+      }
+      #dashboard-section h2 {
+        font-size: 2rem;
+      }
+      .welcome-msg {
+        font-size: 1.1rem;
+      }
+      .btn-logout {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper" role="main" aria-label="Sistema Biblioteca - Registro, Login y Panel">
+
+    <!-- Registro -->
+    <section id="register-section">
+      <h2><i class="fa-solid fa-user-plus me-2"></i>Registro</h2>
+      <form id="register-form" novalidate>
+        <div class="mb-3 position-relative">
+          <label for="register-name" class="form-label visually-hidden">Nombre</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+            <input
+              type="text"
+              class="form-control"
+              id="register-name"
+              name="name"
+              placeholder="Nombre"
+              required
+              autocomplete="name"
+            />
+          </div>
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="register-email" class="form-label visually-hidden">Correo Electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <input
+              type="email"
+              class="form-control"
+              id="register-email"
+              name="email"
+              placeholder="Correo Electrónico"
+              required
+              autocomplete="email"
+            />
+          </div>
+        </div>
+        <div class="mb-3 position-relative">
+          <label for="register-password" class="form-label visually-hidden">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+            <input
+              type="password"
+              class="form-control"
+              id="register-password"
+              name="password"
+              placeholder="Contraseña"
+              required
+              autocomplete="new-password"
+              minlength="8"
+            />
+          </div>
+        </div>
+        <div class="mb-4 position-relative">
+          <label for="register-usertype" class="form-label visually-hidden">Tipo de Usuario</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-users"></i></span>
+            <select
+              class="form-control"
+              id="register-usertype"
+              name="user_type"
+              required
+              aria-label="Tipo de usuario"
+            >
+              <option value="" disabled selected>Seleccione tipo de usuario</option>
+              <option value="estudiante">Estudiante</option>
+              <option value="docente">Docente</option>
+              <option value="administrador">Administrador</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" aria-label="Botón para registrarse">Registrar</button>
+        <p id="register-msg" class="message" role="alert" aria-live="polite"></p>
+      </form>
+      <a class="link-switch" id="go-to-login" role="button" tabindex="0" aria-label="Ir a iniciar sesión">¿Ya tienes una cuenta? Inicia sesión</a>
+    </section>
+
+    <!-- Login -->
+    <section id="login-section" hidden>
+      <h2><i class="fa-solid fa-user-lock me-2"></i>Iniciar Sesión</h2>
+      <form id="login-form" novalidate>
+        <div class="mb-3 position-relative">
+          <label for="login-email" class="form-label visually-hidden">Correo Electrónico</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+            <input
+              type="email"
+              class="form-control"
+              id="login-email"
+              name="email"
+              placeholder="Correo Electrónico"
+              required
+              autocomplete="email"
+            />
+          </div>
+        </div>
+        <div class="mb-4 position-relative">
+          <label for="login-password" class="form-label visually-hidden">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+            <input
+              type="password"
+              class="form-control"
+              id="login-password"
+              name="password"
+              placeholder="Contraseña"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+        </div>
+        <button type="submit" class="btn-primary" aria-label="Botón para iniciar sesión">Iniciar Sesión</button>
+        <p id="login-msg" class="message" role="alert" aria-live="polite"></p>
+      </form>
+      <a class="link-switch" id="go-to-register" role="button" tabindex="0" aria-label="Ir a registro">¿No tienes una cuenta? Regístrate aquí</a>
+    </section>
+
+    <!-- Panel Principal -->
+    <section id="dashboard-section" hidden>
+      <h2><i class="fa-solid fa-tachometer-alt me-2"></i>Panel Principal</h2>
+      <p class="message success welcome-msg">Bienvenido, <span id="user-name">Usuario</span> 👋</p>
+      <p class="extra-info">Estamos encantados de verte en el sistema de biblioteca.<br/>Utiliza el panel para acceder rápido a tus funciones según tu tipo de usuario.</p>
+      <button class="btn-logout" id="logout-btn" aria-label="Cerrar sesión">Cerrar Sesión <i class="fa-solid fa-right-from-bracket ms-2"></i></button>
+    </section>
+
+  </div>
+
+  <script>
+    const registerSection = document.getElementById('register-section');
+    const loginSection = document.getElementById('login-section');
+    const dashboardSection = document.getElementById('dashboard-section');
+
+    const goToLoginLink = document.getElementById('go-to-login');
+    const goToRegisterLink = document.getElementById('go-to-register');
+
+    const registerForm = document.getElementById('register-form');
+    const registerMsg = document.getElementById('register-msg');
+
+    const loginForm = document.getElementById('login-form');
+    const loginMsg = document.getElementById('login-msg');
+
+    const userNameDisplay = document.getElementById('user-name');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Navegación entre secciones
+    goToLoginLink.addEventListener('click', () => {
+      registerSection.hidden = true;
+      loginSection.hidden = false;
+      dashboardSection.hidden = true;
+      clearMessages();
+    });
+    goToRegisterLink.addEventListener('click', () => {
+      registerSection.hidden = false;
+      loginSection.hidden = true;
+      dashboardSection.hidden = true;
+      clearMessages();
+    });
+
+    // Limpiar mensajes
+    function clearMessages() {
+      registerMsg.textContent = '';
+      loginMsg.textContent = '';
+    }
+
+    // Simulación de usuario registrado
+    let usersDb = [];
+
+    // Registro
+    registerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      registerMsg.textContent = '';
+      const name = registerForm.name.value.trim();
+      const email = registerForm.email.value.trim().toLowerCase();
+      const password = registerForm.password.value;
+      const usertype = registerForm.user_type.value;
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para validar el correo
+      if (!name) return registerMsg.textContent = 'El nombre es obligatorio.';
+      if (!emailRegex.test(email)) return registerMsg.textContent = 'Correo no válido.';
+      if (password.length < 8) return registerMsg.textContent = 'La contraseña debe tener al menos 8 caracteres.';
+      if (!usertype) return registerMsg.textContent = 'Seleccione tipo de usuario.';
+
+      // Verificar si el correo ya existe
+      if(usersDb.find(u => u.email === email)){
+        registerMsg.textContent = 'El correo ya está registrado.';
+        return;
+      }
+
+      // Guardar usuario simulado
+      usersDb.push({name, email, password, usertype});
+      registerMsg.style.color = '#90ee90';
+      registerMsg.textContent = '¡Registro exitoso! Ahora inicia sesión.';
+      registerForm.reset();
+      setTimeout(() => {
+        registerMsg.textContent = '';
+        registerSection.hidden = true;
+        loginSection.hidden = false;
+      }, 2000);
+    });
+
+    // Login
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      loginMsg.textContent = '';
+      const email = loginForm.email.value.trim().toLowerCase();
+      const password = loginForm.password.value;
+
+      const user = usersDb.find(u => u.email === email);
+
+      if(!user || user.password !== password){
+        loginMsg.style.color = '#ff4c4c';
+        loginMsg.textContent = 'Credenciales incorrectas.';
+        return;
+      }
+
+      loginMsg.style.color = '#90ee90';
+      loginMsg.textContent = '¡Inicio de sesión exitoso! Bienvenido, ' + user.name + '.';
+
+      userNameDisplay.textContent = user.name;
+      loginForm.reset();
+
+      setTimeout(() => {
+        registerSection.hidden = true;
+        loginSection.hidden = true;
+        dashboardSection.hidden = false;
+        loginMsg.textContent = '';
+      }, 1500);
+    });
+
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      dashboardSection.hidden = true;
+      loginSection.hidden = false;
+      clearMessages();
+    });
+  </script>
+
+  <!-- Bootstrap JS (optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
